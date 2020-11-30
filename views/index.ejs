@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CellID</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="shortcut icon" href=""/>
+    <style>
+        #loader {display:none;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CellID</h1>
+        <table>
+            <thead>
+                <tr>
+                    <td><b>Key:</b></td>
+                    <td><b>Value:</b></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><label for="cellType">Type:</label></td>
+                    <td><input type="text" name="cellType" placeholder="..."/></td>
+                </tr>
+                <tr>
+                    <td><label for="cellMccMnc">MCC-MNC:</label></td>
+                    <td><input type="text" name="cellMccMnc" placeholder=""/></td>
+                </tr>
+                <tr>
+                    <td><label for="cellID">CellID:</label></td>
+                    <td><input type="text" name="cellID" placeholder="0"/></td>
+                </tr>
+                <tr>
+                    <td><label for="cellID2G">cellID 2G:</label></td>
+                    <td><input type="text" name="cellID2G" placeholder="0"/></td>
+                </tr>                
+                <tr>
+                    <td><label for="cellLAC">LAC:</label></td>
+                    <td><input type="text" name="cellLAC" placeholder="0"/></td>
+                </tr>
+                <tr>
+                    <td><label for="cellTA">TA:</label></td>
+                    <td><input type="text" name="cellTA" placeholder="0"/></td>
+                </tr>
+                <tr>
+                    <td><label for="cellDbm">dbm:</label></td>
+                    <td><input type="text" name="cellDbm" placeholder=""/></td>
+                </tr>
+                <tr>
+                    <td>All data:</td>
+                    <td><span id="cellAllData"></span></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <button class="btn btn-success" id="btnGetCellIDData">GetCellID</button>
+                    </td>
+                    <td>
+                        <div id="loader" class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </td>
+                </tr>                
+            </tbody>
+        </table>
+    </div>
+<script type="text/javascript">
+var btnGetCellID = document.querySelector("#btnGetCellIDData");
+var loaderEl = document.querySelector('#loader');
+btnGetCellID.addEventListener("click", function() {
+    loaderEl.style.display = "block";
+    btnGetCellID.classList.add('disabled');
+    var ourRequest = new XMLHttpRequest();
+    ourRequest.open('GET', '/cellid.json');
+    ourRequest.onload = function() {
+        loaderEl.style.display = "none";
+        btnGetCellID.classList.remove('disabled');
+        if (ourRequest.status >= 200 && ourRequest.status < 400) {
+            var data = JSON.parse(ourRequest.responseText);
+            populateCellIDData(data);
+        } else {
+            console.log("Connected with server, but error on request!");
+        }
+    };
+    ourRequest.onerror = function() {
+        loaderEl.style.display = "none";
+        btnGetCellID.classList.remove('disabled');
+        console.log("Connection error!")
+    };
+    ourRequest.send();
+});
+function populateCellIDData(oJSON) {
+    if (oJSON.status == "ok") {
+        document.querySelector('input[name="cellID"]').value = oJSON.content.cellID;
+        document.querySelector('input[name="cellID2G"]').value = oJSON.content.cellID2G;
+        document.querySelector('input[name="cellLAC"]').value = oJSON.content.lac;
+        document.querySelector('input[name="cellTA"]').value = oJSON.content.ta;
+        document.querySelector('input[name="cellDbm"]').value = oJSON.content.dbm;
+        document.querySelector('input[name="cellType"]').value = oJSON.content.cellType;
+        document.querySelector('input[name="cellMccMnc"]').value = "" + oJSON.content.mcc + oJSON.content.mnc;
+        
+        document.querySelector('#cellAllData').innerText = oJSON.content.all;
+    }
+}
+</script>
+</body>
+</html>

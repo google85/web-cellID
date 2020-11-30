@@ -1,0 +1,19 @@
+{
+  "name": "web-cellid",
+  "version": "1.0.1",
+  "description": "web server with cellID data",
+  "main": "server.js",
+  "scripts": {
+    "devStart": "nodemon server.js"
+  },
+  "author": "DjBpF",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "dependencies": {
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "termux-api": "0.0.1"
+  }
+}
