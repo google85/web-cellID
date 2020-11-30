@@ -1,4 +1,5 @@
 # web-cellID
+--------------
 
 # pre-RUN
 create a file named .env with port constant set:
@@ -13,7 +14,7 @@ start:
 ==> http://localhost:3000/      - pe tel
 
 
-# Informatii
+# Alte Informatii & reqs
 
 \# npm init
 
