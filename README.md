@@ -1,5 +1,10 @@
 # web-cellID
 
+# pre-RUN
+create a file named .env with port constant set:
+
+PORT=3000
+
 # RUN
 start:
 
